@@ -9,9 +9,10 @@ Network intruision detection using ML(Isolation Forest) in Golang
 - extracts feature 'labels' into training_labels.csv and testing_labels.csv
 
 Iso.ipynb
--K-Fold Cross Validation on the training.csv dataset (metrics Accuracy, F1 score)
--Predict on unseen data testing.csv dataset
--on the works...
+- K-Fold Cross Validation on the training.csv dataset (metrics Accuracy, F1 score)
+- Predict on unseen data testing.csv dataset
+- on the works...
+
 
 
 Dataset https://www.kaggle.com/datasets/mryanm/luflow-network-intrusion-detection-data-set
