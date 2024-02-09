@@ -15,8 +15,8 @@ rm "$temp_file"
 
 
 # column extraction
-labels="labels.csv"
-num_labels="num_labels.csv"
+labels="labelss.csv"
+num_labels="labels.csv"
 temp_file1="temp.csv"
 
 column_to_extract1="4"
@@ -24,7 +24,7 @@ column_to_extract2="5"
 column_to_extract3="10" 
 column_to_extract4="11" 
 column_to_extract5="15"
-percentage="80" 
+
 
 # Extract the specified column and create a new CSV file
 cut -d',' -f"$column_to_extract5" "$dataset" > "$labels"
@@ -36,24 +36,3 @@ rm "$labels"
 #extract undesired columns
 awk -v col1="$column_to_extract1" -v col2="$column_to_extract2" -v col3="$column_to_extract3" -v col4="$column_to_extract4" -v col5="$column_to_extract5" -F',' '{ for (i = 1; i <= NF; i++) if (i != col1 && i != col2 && i != col3 && i != col4 && i != col5) printf "%s%s", $i, (i < NF ? "," : ""); print "" }' "$dataset" > "$temp_file1" && mv "$temp_file1" "$dataset"
 
-
-# split file 80/20
-training="training.csv"
-testing="testing.csv"
-training_labels="training_labels.csv"
-testing_labels="testing_labels.csv"
-
-
-total_lines=$(wc -l < "$dataset")
-lines_to_keep1=$(awk -v p="$percentage" 'BEGIN{print int(p * '$total_lines' / 100)}')
-lines_to_keep2=$((total_lines - lines_to_keep1))
-
-
-head -n "$lines_to_keep1" "$dataset" > "$training"
-tail -n "$lines_to_keep2" "$dataset" > "$testing"
-
-head -n "$lines_to_keep1" "$num_labels" > "$training_labels"
-tail -n "$lines_to_keep2" "$num_labels" > "$testing_labels"
-
-rm "$dataset"
-rm "$num_labels"
