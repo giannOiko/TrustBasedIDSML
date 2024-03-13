@@ -10,6 +10,7 @@ import (
 
 func StratifiedKFold(K int, data_label map[int][][]float64) (ch chan structs.Split) {
 
+	//determine fold sizes for zeros and ones
 	foldSizezeros := int(math.Round(float64((len(data_label[0]) / K))))
 	foldSizeones := int(math.Round((float64(len(data_label[1]) / K))))
 
@@ -31,25 +32,33 @@ func StratifiedKFold(K int, data_label map[int][][]float64) (ch chan structs.Spl
 			trainData0 := make([][]float64, 0)
 			trainData1 := make([][]float64, 0)
 
-			// Merge all data except the test data into the training data
+			// Create training Data, in stratified fashion
 			trainData0 = append(trainData0, data_label[0][:startIndex0]...)
 			trainData0 = append(trainData0, data_label[0][endIndex0:]...)
 			trainData1 = append(trainData1, data_label[1][:startIndex1]...)
 			trainData1 = append(trainData1, data_label[1][endIndex1:]...)
 
+			//Merge training data
 			trainData := utils.Merge(trainData0, trainData1)
 
+			//Create validate Data, in stratified fashion
 			validData0 := data_label[0][startIndex0:endIndex0]
 			validData1 := data_label[1][startIndex1:endIndex1]
 
+			//Merge validate data
 			validData := utils.Merge(validData0, validData1)
 
 			validDatalen := len(validData)
 
+			// Build labels for the validate data
 			labeldata := utils.BuildLabelsArray(validDatalen, len(validData0))
 
-			utils.Shuffle(validData, trainData, labeldata)
+			//all Data Now are like 0000111111 after the merge
+			//Shuffle Training data for unbiased training
+			//Shuffle validate data along with label data.
+			utils.Shuffle(trainData, validData, labeldata)
 
+			//Return The Fold Data Ready for Cross Validation
 			sp = &structs.Split{
 				TrainData:    trainData,
 				ValidateData: validData,
@@ -65,19 +74,24 @@ func StratifiedKFold(K int, data_label map[int][][]float64) (ch chan structs.Spl
 
 func GridSearchCV(data map[int][][]float64, treenummax int, subsamplmax int, anomaly float64) *structs.Config {
 
+	//configurations with their according Scores.
 	ConfF1s := make(map[structs.Config][]float64, 0)
 	var conf structs.Config
 	i := 1
 
+	//For each Fold
 	for s := range StratifiedKFold(5, data) {
 		treenumStep := 10
 		fmt.Println("Entering Iteration num ", i)
+		//For each conf
 		for tr_n := 10; tr_n <= treenummax; tr_n += treenumStep {
 			for sss := 50; sss <= subsamplmax; sss += 50 {
 				conf = structs.Config{
 					TreeNum:       tr_n,
 					Subsamplesize: sss,
 				}
+				//Train the forest retrieve its F1 Score
+				//Save the F1 Score in the config map
 				forest := forest.IsoForestTrain_Test(s.TrainData, s.ValidateData, tr_n, sss, anomaly)
 				f1Score := utils.F1Score(s.LabelData, forest.Labels)
 				ConfF1s[conf] = append(ConfF1s[conf], f1Score)
@@ -90,6 +104,7 @@ func GridSearchCV(data map[int][][]float64, treenummax int, subsamplmax int, ano
 		}
 		i++
 	}
+	//Find best config and return it
 	bestConfig := utils.FindBestConfig(ConfF1s)
 	fmt.Println(ConfF1s)
 
