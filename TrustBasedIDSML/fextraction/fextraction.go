@@ -154,7 +154,8 @@ func LassoGridSearchCV(data [][]float64, labels []int) []int {
 	fmt.Println("Alpha", lassocv.BestParams["Alpha"])
 
 	//Set lasso ALpha the best returned ALpha from CV
-	lasso.Alpha = lassocv.BestParams["Alpha"].(float64)
+	//lasso.Alpha = lassocv.BestParams["Alpha"].(float64)
+	lasso.Alpha = 1e-10
 
 	//Run lasso regression
 	/////////////////////pare ola ta data
