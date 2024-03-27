@@ -231,7 +231,7 @@ func Flatten2D(arr [][]float64) []float64 {
 		flattened = append(flattened, row...)
 	}
 	return flattened
-}
+}eeei
 
 // shuffle both dataset and labels at the same indexes
 func ShuffleDataset(dataset [][]float64, labels []int) {
