@@ -98,11 +98,14 @@ func LassoGridSearchCV(data [][]float64, labels []int) []int {
 	//Get balanced data
 	Balanced_Data, Balanced_Labels := BalanceData(data, labels)
 
-	NSamples := len(Balanced_Labels)
-	NFeatures := len(Balanced_Data[0])
+	NSamples := len(labels)
+	NFeatures := len(data[0])
+	NSamples_bal := len(Balanced_Labels)
+	NFeatures_bal := len(Balanced_Data[0])
 
 	//Create data and label matrices
-	X, Y := mat.NewDense(NSamples, NFeatures, utils.Flatten2D(Balanced_Data)), mat.NewDense(NSamples, 1, utils.ConvertToFloat(Balanced_Labels))
+	X, Y := mat.NewDense(NSamples, NFeatures, utils.Flatten2D(data)), mat.NewDense(NSamples, 1, utils.ConvertToFloat(labels))
+	X_bal, Y_bal := mat.NewDense(NSamples_bal, NFeatures_bal, utils.Flatten2D(Balanced_Data)), mat.NewDense(NSamples_bal, 1, utils.ConvertToFloat(Balanced_Labels))
 
 	//initialiaze lasso parameters
 	lasso := li.NewLasso()
@@ -113,7 +116,7 @@ func LassoGridSearchCV(data [][]float64, labels []int) []int {
 	lasso.Tol = 1e-4
 
 	//Make alpha parameter grid. Static from 1e-10 multiplied by 10, 10 times until 0.1.
-	gridLength := 10
+	gridLength := 12
 	start_value := 1e-10
 
 	type ParamGrid map[string][]interface{}
@@ -147,13 +150,14 @@ func LassoGridSearchCV(data [][]float64, labels []int) []int {
 		NJobs:              -1}
 
 	//Run Grid Search CV
-	lassocv.Fit(X, Y)
+	lassocv.Fit(X_bal, Y_bal)
 	fmt.Println("Alpha", lassocv.BestParams["Alpha"])
 
 	//Set lasso ALpha the best returned ALpha from CV
 	lasso.Alpha = lassocv.BestParams["Alpha"].(float64)
 
 	//Run lasso regression
+	/////////////////////pare ola ta data
 	lasso.Fit(X, Y)
 
 	//Predict coefficients see which are set to 0 and return the indexes that are not zero

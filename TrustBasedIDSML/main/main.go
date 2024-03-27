@@ -18,7 +18,7 @@ func main() {
 	// Construct the full path to the file.
 	datafile := filepath.Join(dataFolder, os.Args[1])
 	labelsfile := filepath.Join(dataFolder, os.Args[2])
-	//HAHAHAHAHAAHAAH
+
 	//load Data and Labels
 	data := utils.LoadData(datafile)
 	labels := utils.LoadLabels(labelsfile)
