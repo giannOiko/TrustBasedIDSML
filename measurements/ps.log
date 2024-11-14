@@ -1,0 +1,17 @@
+%System CPU: 34.6 %  %System MEM: 20.85 %  called by: python3
+%System CPU: 35.4 %  %System MEM: 21.85 %  called by: python3
+%System CPU: 99.1 %  %System MEM: 21.77 %  called by: python3
+%System CPU: 100 %  %System MEM: 21.80 %  called by: python3
+%System CPU: 100 %  %System MEM: 21.80 %  called by: python3
+%System CPU: 100 %  %System MEM: 21.82 %  called by: python3
+%System CPU: 72.8 %  %System MEM: 21.82 %  called by: python3
+Python Execution time runs: 2.786090135574341 seconds
+%System CPU: 29.4 %  %System MEM: 20.35 %  called by: testgo
+%System CPU: 28.8 %  %System MEM: 20.37 %  called by: testgo
+%System CPU: 31.4 %  %System MEM: 20.37 %  called by: testgo
+%System CPU: 30.4 %  %System MEM: 20.40 %  called by: testgo
+%System CPU: 31.4 %  %System MEM: 20.40 %  called by: testgo
+%System CPU: 32.9 %  %System MEM: 20.43 %  called by: testgo
+%System CPU: 30.4 %  %System MEM: 20.43 %  called by: testgo
+%System CPU: 31.8 %  %System MEM: 20.43 %  called by: testgo
+Go Predict took 1.529490957s to execute
