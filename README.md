@@ -1,6 +1,6 @@
 This repo contains:
 
--the 3-model comparison score-wise.
+-the 3-model comparison score-wise(LIGHTGBM,OCSVM,Kitsune).
 
 -the Raspbery Pi resource comparison between Python, GoLang and Kitsune framework.
 
